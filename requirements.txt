@@ -1,0 +1,8 @@
+# Uygulama
+fastapi
+uvicorn[standard]
+
+# Test ve kod kalitesi
+pytest
+httpx
+ruff

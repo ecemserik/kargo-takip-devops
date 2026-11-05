@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Test ve kod kalitesi
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Veritabanı (uygulama açılışta yeniden oluşturur)
+*.db
+*.sqlite3
+
+# Ortam değişkenleri ve gizli bilgiler
+.env
+
+# Editör / işletim sistemi
+.vscode/
+.idea/
+.DS_Store
