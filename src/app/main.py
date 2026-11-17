@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Kargo Gönderi Takip Sistemi",
     description="Gönderi oluşturma, takip numarasıyla sorgulama ve durum takibi API'si.",
-    version="0.2.0",
+    version="0.3.0",
     lifespan=lifespan,
 )
 
