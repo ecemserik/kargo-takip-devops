@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.database import init_db
+from app.routes import router as shipments_router
 from app.seed import seed_if_empty
 
 
@@ -19,9 +20,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Kargo Gönderi Takip Sistemi",
     description="Gönderi oluşturma, takip numarasıyla sorgulama ve durum takibi API'si.",
-    version="0.1.0",
+    version="0.2.0",
     lifespan=lifespan,
 )
+
+app.include_router(shipments_router)
 
 
 @app.get("/", tags=["Genel"])
