@@ -34,6 +34,19 @@ class TrackingEvent(BaseModel):
     created_at: str
 
 
+class ShipmentSummary(BaseModel):
+    """Listelemede gösterilen kısa gönderi bilgisi (hareket geçmişi olmadan)."""
+
+    tracking_no: str
+    sender_name: str
+    receiver_name: str
+    origin_city: str
+    destination_city: str
+    current_status: str
+    current_status_label: str
+    updated_at: str
+
+
 class ShipmentDetail(BaseModel):
     """Gönderi bilgileri ve hareket geçmişi."""
 

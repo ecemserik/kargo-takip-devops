@@ -106,3 +106,28 @@ def update_status(
         (new_status, now, row["id"]),
     )
     conn.commit()
+
+
+def list_shipments(conn: sqlite3.Connection, status: str | None = None) -> list[dict]:
+    """Gönderileri son güncellenene göre sıralı listeler; istenirse duruma göre filtreler."""
+    query = "SELECT * FROM shipments"
+    params: tuple = ()
+    if status is not None:
+        query += " WHERE current_status = ?"
+        params = (status,)
+    query += " ORDER BY updated_at DESC"
+
+    rows = conn.execute(query, params).fetchall()
+    return [
+        {
+            "tracking_no": r["tracking_no"],
+            "sender_name": r["sender_name"],
+            "receiver_name": r["receiver_name"],
+            "origin_city": r["origin_city"],
+            "destination_city": r["destination_city"],
+            "current_status": r["current_status"],
+            "current_status_label": STATUS_LABELS[r["current_status"]],
+            "updated_at": r["updated_at"],
+        }
+        for r in rows
+    ]
