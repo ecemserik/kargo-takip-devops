@@ -7,7 +7,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app import repository
 from app.database import get_db
-from app.schemas import ShipmentCreate, ShipmentDetail, StatusUpdate
+from app.schemas import (
+    ShipmentCreate,
+    ShipmentDetail,
+    ShipmentSummary,
+    StatusCode,
+    StatusUpdate,
+)
 from app.statuses import ALLOWED_TRANSITIONS, STATUS_LABELS, can_transition
 from app.tracking import is_valid_tracking_no
 
@@ -22,6 +28,12 @@ def create_shipment(payload: ShipmentCreate, conn: DB):
     """F1: Yeni gönderi oluşturur ve S10 standardında takip numarası üretir."""
     tracking_no = repository.create_shipment(conn, payload.model_dump())
     return repository.get_shipment_detail(conn, tracking_no)
+
+
+@router.get("", response_model=list[ShipmentSummary])
+def list_shipments(conn: DB, status: StatusCode | None = None):
+    """F4: Gönderileri listeler. status parametresiyle duruma göre filtrelenebilir."""
+    return repository.list_shipments(conn, status)
 
 
 @router.get(
