@@ -82,3 +82,27 @@ def get_shipment_detail(conn: sqlite3.Connection, tracking_no: str) -> dict | No
             for e in events
         ],
     }
+
+
+def update_status(
+    conn: sqlite3.Connection,
+    tracking_no: str,
+    new_status: str,
+    location: str,
+    note: str | None,
+) -> None:
+    """Gönderinin durumunu günceller ve hareket geçmişine yeni kayıt ekler."""
+    now = _now()
+    row = conn.execute(
+        "SELECT id FROM shipments WHERE tracking_no = ?", (tracking_no,)
+    ).fetchone()
+    conn.execute(
+        """INSERT INTO tracking_events (shipment_id, status, location, note, created_at)
+           VALUES (?, ?, ?, ?, ?)""",
+        (row["id"], new_status, location, note, now),
+    )
+    conn.execute(
+        "UPDATE shipments SET current_status = ?, updated_at = ? WHERE id = ?",
+        (new_status, now, row["id"]),
+    )
+    conn.commit()

@@ -1,6 +1,18 @@
 """API'nin aldığı ve döndürdüğü veri şekilleri (Pydantic modelleri)."""
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
+
+# API'de kabul edilen durum kodları (Swagger'da açılır liste olarak görünür)
+StatusCode = Literal[
+    "KABUL_EDILDI",
+    "TRANSFER_MERKEZINDE",
+    "DAGITIMA_CIKTI",
+    "TESLIM_EDILDI",
+    "TESLIM_EDILEMEDI",
+    "IADE_EDILDI",
+]
 
 
 class ShipmentCreate(BaseModel):
@@ -35,3 +47,13 @@ class ShipmentDetail(BaseModel):
     created_at: str
     updated_at: str
     events: list[TrackingEvent]
+
+
+class StatusUpdate(BaseModel):
+    """Gönderi durumunu güncellerken gönderilen bilgiler."""
+
+    status: StatusCode = Field(examples=["TRANSFER_MERKEZINDE"])
+    location: str = Field(
+        min_length=2, max_length=100, examples=["Ankara Transfer Merkezi"]
+    )
+    note: str | None = Field(default=None, max_length=200)
